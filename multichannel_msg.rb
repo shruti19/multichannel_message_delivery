@@ -200,5 +200,4 @@ msgServer.broadcast(msg2)
 puts '---------'
 user.receive_message sms
 puts '---------'
-
 user.receive_message whatsapp
