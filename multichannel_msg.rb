@@ -30,7 +30,7 @@ class User
 	def receive_message channel
 		puts "User (#{name}) listening .."
 		if @subscribed_channels.include?(channel.class.to_s)
-			puts "Messgae from #{channel.class.to_s}"
+			puts "Messages from #{channel.class.to_s}"
 			msgs = channel.read_messages self
 			msgs[0] ? (puts "Messgaes #{msgs.map(&:content)}") : (puts "No messages on #{channel.class.to_s}")
 		end
@@ -59,8 +59,8 @@ class MessageServer
 
 	def send_message message, channel
 		if message.user.subscribed?(channel)
-			channel.update(message) 
 			puts "Message (id: #{message.id}) sent on #{channel.class.to_s}"	
+			channel.update(message) 
 		end	# if user has not subscribed, will print error
 	end
 
@@ -92,6 +92,7 @@ class Message
 	end
 end
 
+## To handle error logging, retries if a channel is down and cant update its queue.
 class BaseChannel
 	def initialize
 		
@@ -114,14 +115,14 @@ class SMSChannel < BaseChannel
 
 	def update msg
 		@message_queue << msg
-		puts "SMSChannel: updated msg id #{msg.id}"
+		puts "\tSMSChannel: updated msg '#{msg.content}'"
 	end
 
 	def read_messages user
 		user_messages = []
 		@message_queue.each do |msg|
 			user_messages << msg if msg.user == user
-			puts "#{msg.type} message recieved: #{msg.content}"
+			puts "\t#{msg.type} message recieved: '#{msg.content}'"
 		end
 		@message_queue = @message_queue - user_messages
 		return user_messages
@@ -139,14 +140,14 @@ class WhatsAppChannel < BaseChannel
 
 	def update msg
 		@message_queue << msg
-		puts "WhatsAppChannel: updated msg id: #{msg.content}"
+		puts "\tWhatsAppChannel: updated msg '#{msg.content}'"
 	end
 
 	def read_messages user
 		user_messages = []
 		@message_queue.each do |msg|
 			user_messages << msg if msg.user == user
-			puts "#{msg.type} message recieved: #{msg.content}"
+			puts "\t#{msg.type} message recieved: '#{msg.content}'"
 		end
 		@message_queue = @message_queue - user_messages
 		return user_messages
@@ -164,14 +165,14 @@ class EmailChannel < BaseChannel
 
 	def update msg
 		@message_queue << msg
-		puts "EmailChannel: updated msg id: #{msg.id}"
+		puts "\tEmailChannel: updated msg '#{msg.content}'"
 	end
 
 	def read_messages user
 		user_messages = []
 		@message_queue.each do |msg|
 			user_messages << msg if msg.user == user
-			puts "#{msg.type} message recieved: #{msg.content}"
+			puts "\t#{msg.type} message recieved: '#{msg.content}'"
 		end
 		@message_queue = @message_queue - user_messages
 		return user_messages
