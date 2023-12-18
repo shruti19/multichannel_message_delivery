@@ -1,3 +1,9 @@
+## This example combines observer and decorator pattern
+## Decorator patterns is applied to message channels where each channel can have its own operations 
+## without modifying implementations of other channels
+## Observer patten is seen when message server publishes messages to channels and channels have an update method to 
+## read messages
+
 class User
 	attr_accessor :subscribed_channels, :name
 
