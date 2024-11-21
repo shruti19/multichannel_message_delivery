@@ -205,5 +205,7 @@ msg2 = msgServer.create_message('blob', 'Picture uploaded', user)
 msgServer.broadcast(msg2)
 puts '---------'
 user.receive_message sms
+## @@Correction: User will not know the sms object as it may be on different server. Better to pass string as arg
+
 puts '---------'
 user.receive_message whatsapp
